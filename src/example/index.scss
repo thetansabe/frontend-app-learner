@@ -72,6 +72,12 @@ p {
   text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
 }
 
+.chat_history-title:hover {
+  background-color: #e0e0e3;
+  padding: 0 8px;
+  border-radius: 8px;
+}
+
 .right {
   width: 74%;
   min-height: 100%; /* Adjust as needed */
@@ -196,7 +202,22 @@ p {
 
 
 @media screen and (max-width: 768px) {
+  .container{
+    position: relative;
+  }
+
   .left{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 56%;
+  }
+
+  .left.show{
+    display: block;
+  }
+
+  .left.hide{
     display: none;
   }
 
@@ -204,10 +225,6 @@ p {
     padding: 0;
     box-sizing: unset;
     margin: 0;
-  }
-
-  .container{
-    position: relative;
   }
 
   .right{
@@ -240,7 +257,8 @@ p {
     border-radius: 50%;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     position: absolute;
+    left: 60%;
+    transition: all 0.2s ease;
     cursor: pointer;
-    left: 10px;
   }
 }

@@ -2,8 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faComment } from "@fortawesome/free-solid-svg-icons";
 import HistoryTitle from "./HistoryTitle";
 
-const SideBar = () => (
-  <div className="bg-white p-4 left">
+const SideBar = ({isOpen}) => (
+
+  <div className={`bg-white p-4 left ${isOpen ? 'show' : 'hide'}`}>
     <div className="new_chat">
       <FontAwesomeIcon icon={faPlus} />
       <p>New chat</p>

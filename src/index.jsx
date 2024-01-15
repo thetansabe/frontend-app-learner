@@ -19,6 +19,15 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+// ReactDOM.render(
+//       <AppProvider>
+//         <Header />
+//         <ExamplePage />
+//         <Footer />
+//       </AppProvider>,
+//       document.getElementById('root'),
+//     );
+
 // subscribe(APP_READY, () => {
 //   ReactDOM.render(
 //     <AppProvider>
