@@ -1,31 +1,67 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addMessage, initMessages } from "../../data/redux/actions";
+import { userInfoSelector } from "../../data/redux/selectors";
 
 const Sender = () => {
-  // handle contenteditable cursor position
-  const textAreaRef = useRef(null);
+  
+  const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
 
-  useEffect(() => {console.log("rerender");}, [textAreaRef.current]);
+  const userInfo = useSelector(userInfoSelector);
+
+  useEffect(async () => {
+    try{
+      const data = await axios.get(`${process.env.CHAT_BOT_URL}/all`);
+      
+      const validMessages = data.data.filter((message) => 
+        message.sessionId === userInfo.sessionId
+      );
+
+      const messages = validMessages.map((message) => {
+        if(message.sessionId !== userInfo.sessionId) return;
+        return {
+          sessionId: message.sessionId,
+          text: message.response.text,
+          timestamp: message.timestamp,
+          isLiked: false,
+        };
+      });
+
+      console.log(messages);
+      const sortedByTimeMessages = messages.sort((a, b) => {a.timestamp - b.timestamp});
+      
+      dispatch(initMessages(sortedByTimeMessages));
+    }catch(e){
+      console.log(e);
+    }
+  }, [message]);
 
   const handleSendMessage = () => {
-    console.log(`call ${process.env.CHAT_BOT_URL}/completion with message: ${textAreaRef.current}`);
+    console.log(
+      `call ${process.env.CHAT_BOT_URL}/completion with message: ${message}`
+    );
 
-    axios
-      .post(`${process.env.CHAT_BOT_URL}/completion`, {
-        sessionId: "0",
-        text: textAreaRef.current,
-      })
-      .then((response) => {
-        console.log("success", response.data);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
     
+    // dispatch(addMessage({sessionId: 0, text: message, timestamp: Math.floor(Date.now() / 1000), isLiked: false}));
+
+    // axios
+    //   .post(`${process.env.CHAT_BOT_URL}/completion`, {
+    //     sessionId: "0",
+    //     text: message,
+    //   })
+    //   .then((response) => {
+    //     console.log("success", response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error);
+    //   });
+
     // clear text area
-    textAreaRef.current = null;
+    setMessage("");
   };
 
   return (
@@ -34,12 +70,11 @@ const Sender = () => {
         className="divtext"
         contentEditable={true}
         suppressContentEditableWarning={true}
-        onInput={(e) => {
-          textAreaRef.current = e.target.textContent;
-          // console.log("e.target.value", textAreaRef.current);
+        onBlur={e => {
+          setMessage(e.target.textContent);
         }}
       >
-        {textAreaRef.current}
+        {message}
       </div>
       <div className="send_btn" onClick={handleSendMessage}>
         <FontAwesomeIcon icon={faPaperPlane} />

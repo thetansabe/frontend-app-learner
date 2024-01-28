@@ -13,36 +13,30 @@ import messages from './i18n';
 import ExamplePage from './example/ExamplePage';
 
 import './index.scss';
-
-ReactDOM.render(
-    <ExamplePage />,
-  document.getElementById('root'),
-);
+import store from './example/data/redux/store';
+import { Provider } from 'react-redux';
 
 // ReactDOM.render(
-//       <AppProvider>
-//         <Header />
-//         <ExamplePage />
-//         <Footer />
-//       </AppProvider>,
-//       document.getElementById('root'),
-//     );
+//   <Provider store={store}>
+//     <ExamplePage />
+//   </Provider>,
+//   document.getElementById('root'),
+// );
 
-// subscribe(APP_READY, () => {
-//   ReactDOM.render(
-//     <AppProvider>
-//       <Header />
-//       <ExamplePage />
-//       <Footer />
-//     </AppProvider>,
-//     document.getElementById('root'),
-//   );
-// });
+subscribe(APP_READY, () => {
+  ReactDOM.render(
+    <AppProvider store={store}>
+      <Header />
+      <ExamplePage />
+    </AppProvider>,
+    document.getElementById('root'),
+  );
+});
 
-// subscribe(APP_INIT_ERROR, (error) => {
-//   ReactDOM.render(<ErrorPage message={error.message} />, document.getElementById('root'));
-// });
+subscribe(APP_INIT_ERROR, (error) => {
+  ReactDOM.render(<ErrorPage message={error.message} />, document.getElementById('root'));
+});
 
-// initialize({
-//   messages,
-// });
+initialize({
+  messages,
+});
