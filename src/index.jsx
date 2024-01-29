@@ -13,13 +13,21 @@ import messages from './i18n';
 import ExamplePage from './example/ExamplePage';
 
 import './index.scss';
+import store from './example/data/redux/store';
+import { Provider } from 'react-redux';
+
+// ReactDOM.render(
+//   <Provider store={store}>
+//     <ExamplePage />
+//   </Provider>,
+//   document.getElementById('root'),
+// );
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
-    <AppProvider>
+    <AppProvider store={store}>
       <Header />
       <ExamplePage />
-      <Footer />
     </AppProvider>,
     document.getElementById('root'),
   );
