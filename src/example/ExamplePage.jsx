@@ -3,7 +3,10 @@ import SideBar from "./components/sidebar/SideBar";
 import Chat from "./components/chat/Chat";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  fetchAuthenticatedUser,
+} from '@edx/frontend-platform/auth';
 
 const ExamplePage = () => {
 
@@ -13,6 +16,16 @@ const ExamplePage = () => {
     console.log(isOpen);
     setIsOpen(!isOpen);
   };
+
+  useEffect(async () => {
+    const jwtHeaderCookie = document.cookie;
+
+    console.log("all cookies", jwtHeaderCookie);
+
+
+    const authenticatedUser = await fetchAuthenticatedUser();
+    console.log("authenticated user: ", authenticatedUser);
+  }, []);
 
   return (
     <main>

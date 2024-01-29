@@ -12,3 +12,10 @@ export const initMessages = (messages) => {
     payload: messages
   }
 }
+
+export const initUser = (user) => {
+  return {
+    type: 'INIT_USER',
+    payload: user
+  }
+}

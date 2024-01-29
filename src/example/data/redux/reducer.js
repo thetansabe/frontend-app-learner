@@ -46,6 +46,11 @@ const rootReducer = (state = initState, action) => {
           return message
         })
       }
+    case 'INIT_USER':
+      return {
+        ...state,
+        userInfo: action.payload
+      }
     default:
       return state
   }
