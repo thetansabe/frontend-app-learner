@@ -70,12 +70,16 @@ p {
   white-space: nowrap; /* Prevent text from wrapping to the next line */
   overflow: hidden; /* Hide any content that overflows the box */
   text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
+  padding-left: 12px;
 }
 
 .chat_history-title:hover {
   background-color: #e0e0e3;
-  padding: 0 8px;
   border-radius: 8px;
+}
+
+.history_section{
+  margin-top: 12px;
 }
 
 .right {
@@ -219,6 +223,7 @@ p {
 
   .left.show{
     display: block;
+    transition: all 0.2s ease;
   }
 
   .left.hide{
@@ -261,8 +266,13 @@ p {
     border-radius: 50%;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     position: absolute;
-    left: 60%;
+    top: 10px;
     transition: all 0.2s ease;
     cursor: pointer;
+  }
+
+  .hamburger.open{
+    left: 60%;
+    transition: all 0.2s ease;
   }
 }

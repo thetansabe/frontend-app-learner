@@ -1,26 +1,14 @@
 
 const initState = {
-  userInfo: {
-    userName: 'John',
-    email: 'john@gmail.com',
-    sessionId: 0,
-    id: 0
-  },
-  
-  messages: [
-    {sessionId: 0, text: 'Hello', timestamp: 1544723344},
-    {sessionId: 1, text: 'Hi', timestamp: 1544723345},
-    {sessionId: 0, text: 'How are you?', timestamp: 1544723346},
-    {sessionId: 1, text: 'Fine', timestamp: 1544723347},
-    {sessionId: 0, text: 'Good', timestamp: 1544723348},
-    {sessionId: 1, text: 'Bye', timestamp: 1544723349},
-    {sessionId: 0, text: 'See you', timestamp: 1544723350},
-
-  ]
+  userInfo: null, //{}
+  sessionId: '',
+  history: null, //{a:[]}
+  messages: null //[{a:1}]
 };
 
 const rootReducer = (state = initState, action) => {
   console.log({state, action});
+  
   switch (action.type) {
     case 'INIT_MESSAGES':
       return {
@@ -50,6 +38,16 @@ const rootReducer = (state = initState, action) => {
       return {
         ...state,
         userInfo: action.payload
+      }
+    case 'INIT_SESSION':
+      return {
+        ...state,
+        sessionId: action.payload
+      }
+    case 'INIT_HISTORY':
+      return {
+        ...state,
+        history: action.payload
       }
     default:
       return state

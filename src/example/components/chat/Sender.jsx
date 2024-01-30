@@ -3,8 +3,8 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, initMessages } from "../../data/redux/actions";
-import { userInfoSelector } from "../../data/redux/selectors";
+import { initHistory, initMessages, initUser } from "../../data/redux/actions";
+import { sessionIdSelector, userInfoSelector } from "../../data/redux/selectors";
 
 const Sender = () => {
   
@@ -12,29 +12,34 @@ const Sender = () => {
   const dispatch = useDispatch();
 
   const userInfo = useSelector(userInfoSelector);
+  const sessionId = useSelector(sessionIdSelector);
 
   useEffect(async () => {
     try{
-      const data = await axios.get(`${process.env.CHAT_BOT_URL}/all`);
-      
-      const validMessages = data.data.filter((message) => 
-        message.sessionId === userInfo.sessionId
-      );
+      const authenticatedUser = {
+        "email": "thetannguyen193@gmail.com",
+        "userId": 4,
+        "username": "thetan_878",
+        "administrator": false,
+        "name": "thetan",
+        "profileImage": {
+          "hasImage": false,
+          "imageUrlFull": "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
+        }
+      };
+      // ===================================
+  
+      if (authenticatedUser && userInfo) {
+        dispatch(initUser(authenticatedUser));
+        const history = await axios.get(`${process.env.CHAT_BOT_URL}/history/${userInfo.userId}`);
+        dispatch(initHistory(history.data));
+      }
 
-      const messages = validMessages.map((message) => {
-        if(message.sessionId !== userInfo.sessionId) return;
-        return {
-          sessionId: message.sessionId,
-          text: message.response.text,
-          timestamp: message.timestamp,
-          isLiked: false,
-        };
-      });
+      if(sessionId){
+        const conversation = await axios.get(`${process.env.CHAT_BOT_URL}/all/${sessionId}`);      
+        dispatch(initMessages(conversation.data));
+      }
 
-      console.log(messages);
-      const sortedByTimeMessages = messages.sort((a, b) => {a.timestamp - b.timestamp});
-      
-      dispatch(initMessages(sortedByTimeMessages));
     }catch(e){
       console.log(e);
     }
