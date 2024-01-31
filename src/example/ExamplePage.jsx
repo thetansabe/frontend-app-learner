@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import {
   getAuthenticatedUser, hydrateAuthenticatedUser,
 } from '@edx/frontend-platform/auth';
-import { initUser } from "./data/redux/actions";
+import { initUser, initHistory } from "./data/redux/actions";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const ExamplePage = () => {
 
@@ -25,22 +26,24 @@ const ExamplePage = () => {
     // await hydrateAuthenticatedUser();
     // const authenticatedUser = await getAuthenticatedUser();
 
-    // const authenticatedUser = {
-    //   "email": "thetannguyen193@gmail.com",
-    //   "userId": 4,
-    //   "username": "thetan_878",
-    //   "administrator": false,
-    //   "name": "thetan",
-    //   "profileImage": {
-    //     "hasImage": false,
-    //     "imageUrlFull": "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
-    //   }
-    // };
-    // // ===================================
+    const authenticatedUser = {
+      "email": "thetannguyen193@gmail.com",
+      "userId": 4,
+      "username": "thetan_878",
+      "administrator": false,
+      "name": "thetan",
+      "profileImage": {
+        "hasImage": false,
+        "imageUrlFull": "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
+      }
+    };
+    // ===================================
 
-    // if (authenticatedUser) {
-    //   dispatch(initUser(authenticatedUser));
-    // }
+    if (authenticatedUser) {
+      dispatch(initUser(authenticatedUser));
+      const history = await axios.get(`${process.env.CHAT_BOT_URL}/history/${authenticatedUser.userId}`);
+      dispatch(initHistory(history.data));
+    }
 
 
   }, []);

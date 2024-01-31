@@ -16,21 +16,7 @@ const Sender = () => {
 
   useEffect(async () => {
     try{
-      const authenticatedUser = {
-        "email": "thetannguyen193@gmail.com",
-        "userId": 4,
-        "username": "thetan_878",
-        "administrator": false,
-        "name": "thetan",
-        "profileImage": {
-          "hasImage": false,
-          "imageUrlFull": "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
-        }
-      };
-      // ===================================
-  
-      if (authenticatedUser && userInfo) {
-        dispatch(initUser(authenticatedUser));
+      if (userInfo) {
         const history = await axios.get(`${process.env.CHAT_BOT_URL}/history/${userInfo.userId}`);
         dispatch(initHistory(history.data));
       }

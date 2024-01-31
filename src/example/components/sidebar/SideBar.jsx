@@ -17,22 +17,26 @@ const SideBar = ({isOpen}) => {
         <p>New chat</p>
       </div>
   
-      {chatHistory && <div className="chat_history">
-        <div className="history_section">
-          <h3>Today</h3>
-          {chatHistory['today'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
-        </div>
-  
-        <div className="history_section">
-          <h3>This week</h3>
-          {chatHistory['thisWeek'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
-        </div>
+      {chatHistory ? 
+        <div className="chat_history">
+          <div className="history_section">
+            <h3>Today</h3>
+            {chatHistory['today'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+          </div>
+    
+          <div className="history_section">
+            <h3>This week</h3>
+            {chatHistory['thisWeek'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+          </div>
 
-        <div className="history_section">
-          <h3>This month</h3>
-          {chatHistory['thisMonth'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+          <div className="history_section">
+            <h3>This month</h3>
+            {chatHistory['thisMonth'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+          </div>
         </div>
-      </div>}
+        :
+        <div className="loading"></div>
+      }
     </div>
   )
 };
