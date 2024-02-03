@@ -9,11 +9,11 @@ const Chat = () => {
   const messages = useSelector(messagesSelector);
 
   return (
-    <div className="p-4 right">
+    <div className="right">
       {/* Conversation */}
       <div>
         { messages ? 
-            messages.map((message, index) => <BotMessage key={message.id} content={{message, index}}/>)
+            messages.map((message, index) => <BotMessage key={message._id} content={{message, index}}/>)
             :
             <Menu/>
         }

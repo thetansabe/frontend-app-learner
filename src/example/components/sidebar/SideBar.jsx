@@ -21,17 +21,17 @@ const SideBar = ({isOpen}) => {
         <div className="chat_history">
           <div className="history_section">
             <h3>Today</h3>
-            {chatHistory['today'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+            {chatHistory['today'].map((history) => <HistoryTitle key={history._id} history={history}/>)}
           </div>
     
           <div className="history_section">
             <h3>This week</h3>
-            {chatHistory['thisWeek'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+            {chatHistory['thisWeek'].map((history) => <HistoryTitle key={history._id} history={history}/>)}
           </div>
 
           <div className="history_section">
             <h3>This month</h3>
-            {chatHistory['thisMonth'].map((history) => <HistoryTitle key={history.id} history={history}/>)}
+            {chatHistory['thisMonth'].map((history) => <HistoryTitle key={history._id} history={history}/>)}
           </div>
         </div>
         :

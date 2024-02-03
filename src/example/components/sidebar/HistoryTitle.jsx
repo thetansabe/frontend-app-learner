@@ -3,7 +3,7 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 
 const HistoryTitle = ({history}) => {
 
-  const { sessionId, text } = history;
+  const { sessionId, content } = history;
 
   const openHistory = (sessionId) => () => {
     console.log(`open history with sessionId: ${sessionId}`);
@@ -13,7 +13,7 @@ const HistoryTitle = ({history}) => {
     <li className="chat_history-title" onClick={openHistory(sessionId)}>
       <FontAwesomeIcon icon={faComment} />
       <p>
-        {text}
+        {content}
       </p>
     </li>
   );

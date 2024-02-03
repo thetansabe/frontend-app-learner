@@ -10,6 +10,7 @@ import {
 import { initUser, initHistory } from "./data/redux/actions";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { getChatbotHistories } from "./data/services/ChatbotService";
 
 const ExamplePage = () => {
 
@@ -22,29 +23,32 @@ const ExamplePage = () => {
   };
 
   useEffect(async () => {
-    // ====== FOR INTEGRATED USAGE ======
-    // await hydrateAuthenticatedUser();
-    // const authenticatedUser = await getAuthenticatedUser();
+    try{
+      // ====== FOR INTEGRATED USAGE ======
+      // await hydrateAuthenticatedUser();
+      // const authenticatedUser = await getAuthenticatedUser();
 
-    const authenticatedUser = {
-      "email": "thetannguyen193@gmail.com",
-      "userId": 4,
-      "username": "thetan_878",
-      "administrator": false,
-      "name": "thetan",
-      "profileImage": {
-        "hasImage": false,
-        "imageUrlFull": "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
+      const authenticatedUser = {
+        "email": "thetannguyen193@gmail.com",
+        "userId": 4,
+        "username": "thetan_878",
+        "administrator": false,
+        "name": "thetan",
+        "profileImage": {
+          "hasImage": false,
+          "imageUrlFull": "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
+        }
+      };
+      // ===================================
+
+      if (authenticatedUser) {
+        dispatch(initUser(authenticatedUser));
+        const history = await getChatbotHistories(authenticatedUser.userId);
+        dispatch(initHistory(history));
       }
-    };
-    // ===================================
-
-    if (authenticatedUser) {
-      dispatch(initUser(authenticatedUser));
-      const history = await axios.get(`${process.env.CHAT_BOT_URL}/history/${authenticatedUser.userId}`);
-      dispatch(initHistory(history.data));
+    }catch(e){
+      console.log(e);
     }
-
 
   }, []);
 
