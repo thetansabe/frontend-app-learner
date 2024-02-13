@@ -19,3 +19,17 @@ export const initUser = (user) => {
     payload: user
   }
 }
+
+export const initSession = (sessionId) => {
+  return {
+    type: 'INIT_SESSION',
+    payload: sessionId
+  }
+}
+
+export const initHistory = (history) => {
+  return {
+    type: 'INIT_HISTORY',
+    payload: history
+  }
+}

@@ -14,7 +14,7 @@ p {
 .container {
   display: flex;
   width: 100%;
-  height: 86vh;
+  height: calc(100vh - 64px);
   gap: 10px;
 }
 
@@ -70,18 +70,23 @@ p {
   white-space: nowrap; /* Prevent text from wrapping to the next line */
   overflow: hidden; /* Hide any content that overflows the box */
   text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
+  padding-left: 12px;
 }
 
 .chat_history-title:hover {
   background-color: #e0e0e3;
-  padding: 0 8px;
   border-radius: 8px;
+}
+
+.history_section{
+  margin-top: 12px;
 }
 
 .right {
   width: 74%;
   min-height: 100%; /* Adjust as needed */
   overflow-y: scroll;
+  padding: 1.5rem 1.5rem 100px 1.5rem;
 }
 
 .chat_content {
@@ -91,6 +96,8 @@ p {
 }
 
 .chat_option {
+  width: 36px;
+  height: 36px;
   display: flex;
   gap: 8px;
   background-color: white;
@@ -98,6 +105,8 @@ p {
   padding: 8px;
   cursor: pointer;
   border-radius: 12px;
+  align-items: center;
+  justify-content: center;
 }
 
 .avatar img {
@@ -182,6 +191,10 @@ p {
   }
 }
 
+.chat_send.blocking{
+  background-color: #D9D9D9;
+}
+
 .divtext:focus {
   outline: none;
 }
@@ -197,6 +210,64 @@ p {
   display: none;
 }
 
+/* LOADING */
+.loading{
+  margin: 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 4px solid #2F607C;
+  background-color: none;
+  border-top: 4px solid transparent;
+
+  animation: spin 2s linear infinite;
+}
+
+.loading.blocking{
+  width: 30px;
+  height: 30px;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.welcome_logo{
+  width: 300px;
+  margin: 0 auto;
+
+}
+
+.welcome_logo img{
+  width: 100%;
+  height: 100px;
+}
+
+/*TYPEWRITER*/
+.typewriter {
+  // I only want the width just about the length of the text
+  width: 100%;
+  animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid;
+
+}
+
+@keyframes typing {
+  from {
+    width: 0
+  }
+}
+    
+@keyframes blink {
+  50% {
+    border-color: transparent
+  }
+}
+
 @media screen and (max-width: 1024px) {
   .container{
     padding: 0 6px;
@@ -208,6 +279,7 @@ p {
 @media screen and (max-width: 768px) {
   .container{
     position: relative;
+    height: calc(100vh - 48px);
   }
 
   .left{
@@ -219,6 +291,7 @@ p {
 
   .left.show{
     display: block;
+    transition: all 0.2s ease;
   }
 
   .left.hide{
@@ -261,8 +334,13 @@ p {
     border-radius: 50%;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     position: absolute;
-    left: 60%;
+    top: 10px;
     transition: all 0.2s ease;
     cursor: pointer;
+  }
+
+  .hamburger.open{
+    left: 60%;
+    transition: all 0.2s ease;
   }
 }

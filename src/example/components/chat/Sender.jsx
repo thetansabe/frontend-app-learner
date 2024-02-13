@@ -1,74 +1,56 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, initMessages } from "../../data/redux/actions";
-import { userInfoSelector } from "../../data/redux/selectors";
+import { initHistory, initMessages, initSession, initUser } from "../../data/redux/actions";
+import { sessionIdSelector, userInfoSelector } from "../../data/redux/selectors";
+import { getChatbotHistories, sendMessage, getMessages } from "../../data/services/ChatbotService";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const Sender = () => {
   
   const [message, setMessage] = useState("");
+  const [isBlock, setIsBlock] = useState(false);
+
   const dispatch = useDispatch();
 
   const userInfo = useSelector(userInfoSelector);
+  const sessionId = useSelector(sessionIdSelector);
 
   useEffect(async () => {
     try{
-      const data = await axios.get(`${process.env.CHAT_BOT_URL}/all`);
-      
-      const validMessages = data.data.filter((message) => 
-        message.sessionId === userInfo.sessionId
-      );
+      if (!userInfo) return;
 
-      const messages = validMessages.map((message) => {
-        if(message.sessionId !== userInfo.sessionId) return;
-        return {
-          sessionId: message.sessionId,
-          text: message.response.text,
-          timestamp: message.timestamp,
-          isLiked: false,
-        };
-      });
+      if(!sessionId){
+        const currSession = uuidv4();
+        dispatch(initSession(currSession));
+      }
 
-      console.log(messages);
-      const sortedByTimeMessages = messages.sort((a, b) => {a.timestamp - b.timestamp});
-      
-      dispatch(initMessages(sortedByTimeMessages));
+      const messages = await getMessages(sessionId);
+      dispatch(initMessages(messages));
+      const histories = await getChatbotHistories(userInfo.userId);
+      dispatch(initHistory(histories));
+
     }catch(e){
       console.log(e);
     }
   }, [message]);
 
-  const handleSendMessage = () => {
-    console.log(
-      `call ${process.env.CHAT_BOT_URL}/completion with message: ${message}`
-    );
-
-    
-    // dispatch(addMessage({sessionId: 0, text: message, timestamp: Math.floor(Date.now() / 1000), isLiked: false}));
-
-    // axios
-    //   .post(`${process.env.CHAT_BOT_URL}/completion`, {
-    //     sessionId: "0",
-    //     text: message,
-    //   })
-    //   .then((response) => {
-    //     console.log("success", response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error);
-    //   });
+  const handleSendMessage = async () => {
+    setIsBlock(true);
+    const res = await sendMessage({sessionId: sessionId.toString(), userId: userInfo.userId.toString(), text: message});
+    setIsBlock(false);
 
     // clear text area
     setMessage("");
   };
 
   return (
-    <div className="chat_send">
+    <div className={`chat_send ${isBlock ? 'blocking' : ''}`}>
       <div
         className="divtext"
-        contentEditable={true}
+        contentEditable={!isBlock}
         suppressContentEditableWarning={true}
         onBlur={e => {
           setMessage(e.target.textContent);
@@ -76,9 +58,14 @@ const Sender = () => {
       >
         {message}
       </div>
-      <div className="send_btn" onClick={handleSendMessage}>
-        <FontAwesomeIcon icon={faPaperPlane} />
-      </div>
+
+      {isBlock ?
+        <div className={`loading ${isBlock ? 'blocking' : ''}`}></div>
+        :
+        <div className="send_btn" onClick={handleSendMessage}>
+          <FontAwesomeIcon icon={faPaperPlane} />
+        </div>
+      }
     </div>
   );
 };
