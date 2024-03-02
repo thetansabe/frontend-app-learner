@@ -21,3 +21,8 @@ export const getMessages = async (sessionId) => {
     const messages = await axios.get(`${process.env.CHAT_BOT_URL}/messages/${sessionId}`);
     return messages.data;
 }
+
+export const uploadKnowledge = async (formDataPayload) => {
+    const response = await axios.post(`${process.env.CHAT_BOT_URL}/upload_files`, formDataPayload);
+    return response.data;
+}
