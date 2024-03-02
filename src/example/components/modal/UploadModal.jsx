@@ -3,6 +3,7 @@ import { sessionIdSelector } from "../../data/redux/selectors";
 import { userInfoSelector } from "../../data/redux/selectors";
 import { uploadKnowledge } from "../../data/services/ChatbotService";
 import { useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 
 const UploadModal = () => {
   const formDataRef = useRef(new FormData());
@@ -22,9 +23,12 @@ const UploadModal = () => {
     });
   };
 
-  const handleSubmitFiles = async () => {
-    const response = await uploadKnowledge(formDataRef.current);
-    console.log("response: ~ 25", response);
+  const handleSubmitFiles = () => {
+    toast.promise(uploadKnowledge(formDataRef.current), {
+      loading: "Uploading...",
+      success: "Uploaded successfully",
+      error: "Failed to upload",
+    });
     return;
   };
 

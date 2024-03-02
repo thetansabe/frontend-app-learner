@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { getChatbotHistories } from "./data/services/ChatbotService";
 import UploadModal from "./components/modal/UploadModal";
+import { Toaster } from "react-hot-toast";
 
 const ExamplePage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,21 +33,21 @@ const ExamplePage = () => {
   useEffect(async () => {
     try {
       // ====== FOR INTEGRATED USAGE ======
-      // await hydrateAuthenticatedUser();
-      // const authenticatedUser = await getAuthenticatedUser();
+      await hydrateAuthenticatedUser();
+      const authenticatedUser = await getAuthenticatedUser();
 
-      const authenticatedUser = {
-        email: "thetannguyen193@gmail.com",
-        userId: 0,
-        username: "thetan_878",
-        administrator: false,
-        name: "thetan",
-        profileImage: {
-          hasImage: false,
-          imageUrlFull:
-            "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
-        },
-      };
+      // const authenticatedUser = {
+      //   email: "thetannguyen193@gmail.com",
+      //   userId: 0,
+      //   username: "thetan_878",
+      //   administrator: false,
+      //   name: "thetan",
+      //   profileImage: {
+      //     hasImage: false,
+      //     imageUrlFull:
+      //       "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
+      //   },
+      // };
       // ===================================
 
       if (authenticatedUser) {
@@ -61,6 +62,10 @@ const ExamplePage = () => {
 
   return (
     <main>
+      <div>
+        <Toaster />
+      </div>
+
       {isDialogOpen && (
         <div id="myModal" className="myModal">
           <div className="modal-content">
