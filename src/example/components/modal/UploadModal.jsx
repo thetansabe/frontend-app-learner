@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux";
-import { sessionIdSelector } from "../../data/redux/selectors";
 import { userInfoSelector } from "../../data/redux/selectors";
 import { uploadKnowledge } from "../../data/services/ChatbotService";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const UploadModal = () => {
   const formDataRef = useRef(new FormData());
-  const sessionId = useSelector(sessionIdSelector);
   const userInfo = useSelector(userInfoSelector);
+  const [files, setFiles] = useState([]);
+  const [progress, setProgress] = useState(0);
 
   const handleDropFiles = (e) => {
     e.preventDefault();
@@ -17,6 +17,7 @@ const UploadModal = () => {
 
   const handleBrowseFiles = (e) => {
     const files = Array.from(e.target.files);
+    setFiles(files);
     formDataRef.current.delete("files");
     files.forEach((file) => {
       formDataRef.current.append("files", file);
@@ -24,31 +25,35 @@ const UploadModal = () => {
   };
 
   const handleSubmitFiles = () => {
-    toast.promise(uploadKnowledge(formDataRef.current), {
-      loading: "Uploading...",
-      success: "Uploaded successfully",
-      error: "Failed to upload",
-    });
-    return;
+    if (files.length === 0) {
+      toast("Please upload your files", { icon: "⚠️" });
+      return;
+    }
+
+    formDataRef.current.delete("userId");
+    formDataRef.current.append("userId", userInfo.userId);
+
+    toast.promise(
+      uploadKnowledge(formDataRef.current, setProgress),
+      {
+        success: (res) => res.data.message,
+        error: (err) => err.response.data.detail,
+      },
+      { style: { maxWidth: "400px" } }
+    );
   };
 
   useEffect(() => {
-    if (sessionId != null && userInfo != null && formDataRef.current) {
-      formDataRef.current.delete("sessionId");
-      formDataRef.current.delete("userId");
-
-      formDataRef.current.append("sessionId", "adaslkf");
-      formDataRef.current.append("userId", 4);
-    }
-  }, [sessionId, userInfo]);
+    console.log("progress: ", progress);
+  }, [progress]);
 
   return (
     <div>
       <h2>Upload your own knowledge</h2>
-
+      <p>Notice: Please upload pdf, txt, doc, docx files only!</p>
       <div className="upload-form-container">
         <div className="upload-files-container">
-          <div className="drag-file-area" draggable onDrop={handleDropFiles}>
+          {/* <div className="drag-file-area" draggable onDrop={handleDropFiles}>
             <span className="material-icons-outlined upload-icon">
               {" "}
               file_upload{" "}
@@ -67,7 +72,25 @@ const UploadModal = () => {
                 <span>from device</span>{" "}
               </span>{" "}
             </label>
+          </div> */}
+
+          <div>
+            <input
+              type="file"
+              className="default-file-input"
+              multiple
+              onChange={handleBrowseFiles}
+            />
+            <span>browse file</span> <span>from device</span>
           </div>
+
+          <div className="progress-bar">
+            <div
+              className="progress-runner"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
           <span className="cannot-upload-message">
             {" "}
             <span className="material-icons-outlined">error</span> Please select
@@ -90,7 +113,7 @@ const UploadModal = () => {
           </div>
           <button
             type="button"
-            className="upload-button"
+            className={`upload-button ${files.length > 0 ? "able" : "disable"}`}
             onClick={handleSubmitFiles}
           >
             Upload
