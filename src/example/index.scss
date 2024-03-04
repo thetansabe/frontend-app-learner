@@ -386,46 +386,39 @@ p {
 
 /* UPLOAD FILES */
 
-.drag-file-area {
-  border: 2px dashed #2f607c;
-  border-radius: 40px;
-  margin: 10px 0 15px;
-  padding: 30px 50px;
-  text-align: center;
-}
-.drag-file-area .upload-icon {
-  font-size: 50px;
-}
-.drag-file-area h3 {
-  font-size: 26px;
-  margin: 15px 0;
-}
-.drag-file-area label {
-  font-size: 19px;
-}
-.drag-file-area label .browse-files-text {
-  color: #2f607c;
-  font-weight: bolder;
-  cursor: pointer;
-}
-.browse-files span {
+// .drag-file-area {
+//   border: 2px dashed #2f607c;
+//   border-radius: 40px;
+//   margin: 10px 0 15px;
+//   padding: 30px 50px;
+//   text-align: center;
+// }
+// .drag-file-area .upload-icon {
+//   font-size: 50px;
+// }
+// .drag-file-area h3 {
+//   font-size: 26px;
+//   margin: 15px 0;
+// }
+// .drag-file-area label {
+//   font-size: 19px;
+// }
+// .drag-file-area label .browse-files-text {
+//   color: #2f607c;
+//   font-weight: bolder;
+//   cursor: pointer;
+// }
+
+.file-browser {
   position: relative;
-  top: -25px;
 }
 .default-file-input {
+  position: absolute;
+  top: 0;
   opacity: 0;
+  cursor: pointer;
 }
-.cannot-upload-message {
-  background-color: #ffc6c4;
-  font-size: 17px;
-  display: flex;
-  align-items: center;
-  margin: 5px 0;
-  padding: 5px 10px 5px 30px;
-  border-radius: 5px;
-  color: #bb0000;
-  display: none;
-}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -434,44 +427,48 @@ p {
     opacity: 1;
   }
 }
-.cannot-upload-message span,
-.upload-button-icon {
-  padding-right: 10px;
+
+.uploaded-holder {
+  overflow: scroll;
+  max-height: 320px;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin: 20px 0;
+  overflow-x: hidden;
 }
-.cannot-upload-message span:last-child {
-  padding-left: 20px;
-  cursor: pointer;
-}
+
 .file-block {
+  display: flex;
+  justify-content: space-between;
   color: #f7fff7;
   background-color: #2f607c;
   transition: all 1s;
-  width: 390px;
-  position: relative;
-  display: none;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 10px 0 15px;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 25px;
-  cursor: pointer;
 }
+
 .file-info {
   display: flex;
+  max-width: 300px;
+}
+
+.file-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 300px;
+}
+
+.file-option {
+  display: flex;
+  gap: 10px;
   align-items: center;
-  font-size: 15px;
 }
-.file-icon {
-  margin-right: 10px;
-}
-.file-name,
-.file-size {
-  padding: 0 3px;
-}
-.remove-file-icon {
-  cursor: pointer;
-}
+
 .progress-bar {
   display: flex;
   bottom: 0;

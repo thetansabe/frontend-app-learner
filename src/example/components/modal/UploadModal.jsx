@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { userInfoSelector } from "../../data/redux/selectors";
 import { uploadKnowledge } from "../../data/services/ChatbotService";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import FileBlock from "./FileBlock";
 import toast from "react-hot-toast";
 
 const UploadModal = () => {
@@ -10,18 +11,16 @@ const UploadModal = () => {
   const [files, setFiles] = useState([]);
   const [progress, setProgress] = useState(0);
 
-  const handleDropFiles = (e) => {
-    e.preventDefault();
-    console.log("drop", e.dataTransfer.files);
+  const handleDeleteFile = (index) => () => {
+    if (files.length < 0) return;
+    const tmp = [...files];
+    tmp.splice(index, 1);
+    setFiles(tmp);
   };
 
   const handleBrowseFiles = (e) => {
     const files = Array.from(e.target.files);
     setFiles(files);
-    formDataRef.current.delete("files");
-    files.forEach((file) => {
-      formDataRef.current.append("files", file);
-    });
   };
 
   const handleSubmitFiles = () => {
@@ -30,22 +29,23 @@ const UploadModal = () => {
       return;
     }
 
+    formDataRef.current.delete("files");
+    files.forEach((file) => {
+      formDataRef.current.append("files", file);
+    });
+
     formDataRef.current.delete("userId");
     formDataRef.current.append("userId", userInfo.userId);
 
     toast.promise(
       uploadKnowledge(formDataRef.current, setProgress),
       {
-        success: (res) => res.data.message,
-        error: (err) => err.response.data.detail,
+        success: (res) => res?.data?.message,
+        error: (err) => err?.response?.data?.detail,
       },
       { style: { maxWidth: "400px" } }
     );
   };
-
-  useEffect(() => {
-    console.log("progress: ", progress);
-  }, [progress]);
 
   return (
     <div>
@@ -74,14 +74,26 @@ const UploadModal = () => {
             </label>
           </div> */}
 
-          <div>
+          <div className="file-browser">
+            <div>
+              <span style={{ color: "#2f607c" }}>browse files</span>{" "}
+              <span>from device</span>
+            </div>
+
             <input
               type="file"
               className="default-file-input"
               multiple
               onChange={handleBrowseFiles}
             />
-            <span>browse file</span> <span>from device</span>
+          </div>
+
+          <div className="uploaded-holder">
+            {files.map((file, index) => (
+              <div key={index} onClick={handleDeleteFile(index)}>
+                <FileBlock fileData={file} />
+              </div>
+            ))}
           </div>
 
           <div className="progress-bar">
@@ -91,26 +103,6 @@ const UploadModal = () => {
             ></div>
           </div>
 
-          <span className="cannot-upload-message">
-            {" "}
-            <span className="material-icons-outlined">error</span> Please select
-            a file first{" "}
-            <span className="material-icons-outlined cancel-alert-button">
-              cancel
-            </span>{" "}
-          </span>
-          <div className="file-block">
-            <div className="file-info">
-              {" "}
-              <span className="material-icons-outlined file-icon">
-                description
-              </span>{" "}
-              <span className="file-name"> </span> |{" "}
-              <span className="file-size"> </span>{" "}
-            </div>
-            <span className="material-icons remove-file-icon">delete</span>
-            <div className="progress-bar"> </div>
-          </div>
           <button
             type="button"
             className={`upload-button ${files.length > 0 ? "able" : "disable"}`}
