@@ -22,6 +22,7 @@ const UploadModal = () => {
   };
 
   const handleBrowseFiles = (e) => {
+    setProgress(0);
     const files = Array.from(e.target.files);
     setFiles(files);
   };
@@ -62,9 +63,6 @@ const UploadModal = () => {
         style: { maxWidth: "400px" },
       });
       await handleTrainFiles();
-      setTimeout(() => {
-        setProgress(0);
-      }, 0);
     } catch (e) {
       toast.error(e?.response?.data?.detail, { style: { maxWidth: "400px" } });
       setProgress(0);
