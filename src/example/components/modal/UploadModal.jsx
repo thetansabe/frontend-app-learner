@@ -1,6 +1,9 @@
 import { useSelector } from "react-redux";
 import { userInfoSelector } from "../../data/redux/selectors";
-import { uploadKnowledge } from "../../data/services/ChatbotService";
+import {
+  trainFiles,
+  uploadKnowledge,
+} from "../../data/services/ChatbotService";
 import { useRef, useState } from "react";
 import FileBlock from "./FileBlock";
 import toast from "react-hot-toast";
@@ -23,7 +26,19 @@ const UploadModal = () => {
     setFiles(files);
   };
 
-  const handleSubmitFiles = () => {
+  const handleTrainFiles = async () => {
+    try {
+      const trainFilesRes = await trainFiles(userInfo.userId);
+      toast.success(trainFilesRes.data.message, {
+        style: { maxWidth: "400px" },
+      });
+      setProgress(100);
+    } catch (e) {
+      toast.error(e?.response?.data?.detail, { style: { maxWidth: "400px" } });
+    }
+  };
+
+  const handleSubmitFiles = async () => {
     if (files.length === 0) {
       toast("Please upload your files", { icon: "⚠️" });
       return;
@@ -37,20 +52,29 @@ const UploadModal = () => {
     formDataRef.current.delete("userId");
     formDataRef.current.append("userId", userInfo.userId);
 
-    toast.promise(
-      uploadKnowledge(formDataRef.current, setProgress),
-      {
-        success: (res) => res?.data?.message,
-        error: (err) => err?.response?.data?.detail,
-      },
-      { style: { maxWidth: "400px" } }
-    );
+    try {
+      const uploadResponse = await uploadKnowledge(
+        formDataRef.current,
+        setProgress
+      );
+
+      toast.success(uploadResponse.data.message, {
+        style: { maxWidth: "400px" },
+      });
+      await handleTrainFiles();
+      setTimeout(() => {
+        setProgress(0);
+      }, 0);
+    } catch (e) {
+      toast.error(e?.response?.data?.detail, { style: { maxWidth: "400px" } });
+      setProgress(0);
+    }
   };
 
   return (
     <div>
       <h2>Upload your own knowledge</h2>
-      <p>Notice: Please upload pdf, txt, doc, docx files only!</p>
+      <p>Notice: Please upload text files only!</p>
       <div className="upload-form-container">
         <div className="upload-files-container">
           {/* <div className="drag-file-area" draggable onDrop={handleDropFiles}>

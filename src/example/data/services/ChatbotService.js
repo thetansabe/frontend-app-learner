@@ -34,9 +34,8 @@ export const getMessages = async (sessionId) => {
 export const uploadKnowledge = async (formDataPayload, setProgress) => {
   const config = {
     onUploadProgress: function (progressEvent) {
-      const progress = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total
-      );
+      const progress =
+        Math.round((progressEvent.loaded * 100) / progressEvent.total) - 20;
       setProgress(progress);
     },
   };
@@ -47,5 +46,12 @@ export const uploadKnowledge = async (formDataPayload, setProgress) => {
     config
   );
 
+  return response;
+};
+
+export const trainFiles = async (userId) => {
+  const response = await axios.get(
+    `${process.env.CHAT_BOT_URL}/train_files/${userId}`
+  );
   return response;
 };

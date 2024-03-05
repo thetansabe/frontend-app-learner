@@ -5,7 +5,7 @@ const FileBlock = ({ fileData }) => {
   const file = {
     name: fileData.name.split(".")[0],
     extension: fileData.name.split(".")[1],
-    size: (fileData.size / 1048576).toFixed(2),
+    size: (fileData.size / 1024).toFixed(2),
   };
   return (
     <div className="file-block">
@@ -14,7 +14,7 @@ const FileBlock = ({ fileData }) => {
         <span>.{file.extension}</span>
       </div>
       <div className="file-option">
-        <p>{file.size} MB |</p>
+        <p>{file.size} KB |</p>
         <FontAwesomeIcon icon={faTrash} style={{ cursor: "pointer" }} />
       </div>
     </div>
