@@ -26,21 +26,21 @@ const ExamplePage = () => {
   useEffect(async () => {
     try {
       // ====== FOR INTEGRATED USAGE ======
-      // await hydrateAuthenticatedUser();
-      // const authenticatedUser = await getAuthenticatedUser();
+      await hydrateAuthenticatedUser();
+      const authenticatedUser = await getAuthenticatedUser();
 
-      const authenticatedUser = {
-        email: "thetannguyen193@gmail.com",
-        userId: 4,
-        username: "thetan_878",
-        administrator: false,
-        name: "thetan",
-        profileImage: {
-          hasImage: false,
-          imageUrlFull:
-            "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
-        },
-      };
+      // const authenticatedUser = {
+      //   email: "thetannguyen193@gmail.com",
+      //   userId: 40,
+      //   username: "thetan_878",
+      //   administrator: false,
+      //   name: "thetan",
+      //   profileImage: {
+      //     hasImage: false,
+      //     imageUrlFull:
+      //       "http://local.edly.io/static/images/profiles/default_500.4215dbe8010f.png",
+      //   },
+      // };
       // ===================================
 
       if (authenticatedUser) {
