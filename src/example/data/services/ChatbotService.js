@@ -55,3 +55,20 @@ export const trainFiles = async (userId) => {
   );
   return response;
 };
+
+export const extractImage = async (form) => {
+  const response = await axios.post(
+    `${process.env.CHAT_BOT_URL}/extract_image`,
+    form
+  );
+  return response;
+};
+
+export const trainImage = async (content) => {
+  const response = await axios.post(
+    `${process.env.CHAT_BOT_URL}/train_image`,
+    null,
+    { params: { content } }
+  );
+  return response;
+};

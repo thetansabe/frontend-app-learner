@@ -1,5 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faComment, faUpload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faUpload,
+  faObjectGroup,
+} from "@fortawesome/free-solid-svg-icons";
 import HistoryTitle from "./HistoryTitle";
 import { useSelector } from "react-redux";
 import { historySelector } from "../../data/redux/selectors";
@@ -24,9 +28,16 @@ const SideBar = ({ isOpen, setIsDialogOpen }) => {
           <FontAwesomeIcon icon={faPlus} />
           <p>New chat</p>
         </div>
-        <div className="new_chat" onClick={() => setIsDialogOpen(true)}>
+        <div className="new_chat" onClick={() => setIsDialogOpen(1)}>
           <FontAwesomeIcon icon={faUpload} />
           <p>Upload file</p>
+        </div>
+      </div>
+
+      <div className="side_bar-options" style={{ justifyContent: "center" }}>
+        <div className="new_chat" onClick={() => setIsDialogOpen(2)}>
+          <FontAwesomeIcon icon={faObjectGroup} />
+          <p>Extract image</p>
         </div>
       </div>
 
