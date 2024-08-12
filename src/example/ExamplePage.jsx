@@ -16,6 +16,7 @@ import {
 } from "./data/services/ChatbotService";
 import UploadModal from "./components/modal/UploadModal";
 import { Toaster } from "react-hot-toast";
+import UploadImage from "./components/modal/UploadImage";
 
 const ExamplePage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,16 +61,24 @@ const ExamplePage = () => {
         <Toaster />
       </div>
 
-      {isDialogOpen && (
+      {isDialogOpen === 1 && (
         <div id="myModal" className="myModal">
           <div className="modal-content">
-            <button
-              onClick={() => setIsDialogOpen(false)}
-              className="modal-close"
-            >
+            <button onClick={() => setIsDialogOpen(0)} className="modal-close">
               Close
             </button>
             <UploadModal />
+          </div>
+        </div>
+      )}
+
+      {isDialogOpen === 2 && (
+        <div id="myModal" className="myModal">
+          <div className="modal-content">
+            <button onClick={() => setIsDialogOpen(0)} className="modal-close">
+              Close
+            </button>
+            <UploadImage />
           </div>
         </div>
       )}
